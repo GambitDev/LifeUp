@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bronze_gl"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/silver_gl"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75"/>
+
+    <ProgressBar
+        android:id="@+id/base_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"/>
+
+    <View
+        android:id="@+id/bronze_medal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/bronze_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/bronze_gl"/>
+
+    <View
+        android:id="@+id/silver_medal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/silver_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/silver_gl"/>
+
+    <View
+        android:id="@+id/gold_medal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/gold_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

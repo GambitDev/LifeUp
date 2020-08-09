@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/category_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Relationship"
+        style="@style/AppTheme.categoryTitle"/>
+
+    <com.gambitdev.lifeup.custom_views.TaskView
+        android:id="@+id/task_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/category_title"
+        android:padding="8dp"
+        tools:taskTitle="Go for a walk with Elian"/>
+
+    <TextView
+        android:id="@+id/exp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/task_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="200 exp"
+        style="@style/AppTheme.expTextStyle"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

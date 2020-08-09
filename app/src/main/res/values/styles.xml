@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.ProgressTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="AppTheme.textStyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="AppTheme.categoryTitle" parent="AppTheme.textStyle">
+        <item name="android:background">@color/light_grey</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme.expTextStyle" parent="AppTheme.textStyle">
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+</resources>

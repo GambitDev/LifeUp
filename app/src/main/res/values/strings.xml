@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Life Up</string>
+    <string name="daily_progress">Daily Progress</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="tasks">Tasks</string>
+    <string name="profile">Profile</string>
+    <string name="achievements">Achievements</string>
+    <string name="task_history">Task History</string>
+    <string name="statistics">Statistics</string>
+    <string name="task_exp">%1d exp</string>
+    <string name="exp_to_lvl_up_string">Earn %1d exp to level up</string>
+</resources>
