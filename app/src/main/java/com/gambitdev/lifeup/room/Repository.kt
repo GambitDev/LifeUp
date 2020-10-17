@@ -1,17 +1,17 @@
 package com.gambitdev.lifeup.room
 
 import android.content.Context
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gambitdev.lifeup.models.Task
 import com.gambitdev.lifeup.models.TaskList
 import com.gambitdev.lifeup.models.UserStats
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class Repository(context: Context) {
-    private val dao by lazy { AppDB.getInstance(context).taskDao() }
+    private val dao = AppDB.getInstance(context).taskDao()
 
     fun updateTask(task: Task) {
         AppDB.executor.execute {
@@ -44,6 +44,7 @@ class Repository(context: Context) {
     }
 
     private fun getTaskList(): TaskList {
+
         return dao.getTaskList()
     }
 
@@ -79,7 +80,11 @@ class Repository(context: Context) {
         return MutableLiveData(tasksForToday)
     }
 
-    fun getUserStats() : LiveData<UserStats> {
+    fun getUserStatsLiveData() : LiveData<UserStats> {
+        return dao.getUserStatsLiveData()
+    }
+
+    fun getUserStats() : UserStats {
         return dao.getUserStats()
     }
 

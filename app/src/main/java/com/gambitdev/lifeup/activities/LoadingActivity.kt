@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.gambitdev.lifeup.R
 import com.gambitdev.lifeup.view_models.TasksViewModel
-import com.gambitdev.lifeup.util.Constants.Companion.NUMBER_OF_INIT_WRITES_TO_DB
 import com.gambitdev.lifeup.util.InitTaskDataUtil
 
 class LoadingActivity : AppCompatActivity() {

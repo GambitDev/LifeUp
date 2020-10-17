@@ -7,19 +7,19 @@ import androidx.lifecycle.Transformations
 import com.gambitdev.lifeup.room.Repository
 
 class StatsViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository by lazy { Repository(application) }
-    private val userStats = repository.getUserStats()
+    private val repository = Repository(application)
+    private val userStats = repository.getUserStatsLiveData()
 
     val userLevel = Transformations.switchMap(userStats) {
         return@switchMap MutableLiveData(it.userLevel)
     }
 
     val expToNextLevel = Transformations.switchMap(userStats) {
-        return@switchMap MutableLiveData(it.expToNextLevel)
+        return@switchMap MutableLiveData(it.expToNextLevel - it.deltaExp)
     }
 
     val currentExpInDegrees = Transformations.switchMap(userStats) {
-        val degrees = (it.exp % it.userLevel).times(360).div(it.expRequiredToLevelUp)
+        val degrees = (it.deltaExp).times(360).div(it.expToNextLevel)
         return@switchMap MutableLiveData(degrees)
     }
 }

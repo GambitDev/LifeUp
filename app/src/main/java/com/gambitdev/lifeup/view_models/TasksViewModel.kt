@@ -1,24 +1,21 @@
 package com.gambitdev.lifeup.view_models
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.gambitdev.lifeup.models.Task
+import com.gambitdev.lifeup.models.UserStats
 import com.gambitdev.lifeup.room.Repository
 import com.gambitdev.lifeup.util.Constants.Companion.NUMBER_OF_TASKS_TO_PRESENT
 
 class TasksViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository by lazy { Repository(application) }
+    private val repository = Repository(application)
     private val userStats = repository.getUserStats()
+    private val userStatsLiveData = repository.getUserStatsLiveData()
 
     val numberOfCompletedTasks = MutableLiveData(0)
 
-    val midnightIndicator = MutableLiveData<Boolean>(false)
-
-    val updateTasksOnMidnight = Transformations.switchMap(midnightIndicator) {
-        getTasksForToday(NUMBER_OF_TASKS_TO_PRESENT)
+    val userLevel = Transformations.switchMap(userStatsLiveData) {
+        return@switchMap MutableLiveData(it.userLevel)
     }
 
     fun getAllTasks() : LiveData<List<Task>> {
@@ -36,7 +33,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
     fun taskCompleted(task: Task) {
         task.completed = true
         repository.updateTask(task)
-        userStats.value!!.exp += task.expWorth
+        rewardUser(task.expWorth)
         incrementNumberOfCompletedTasks()
     }
 
@@ -44,8 +41,10 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         numberOfCompletedTasks.value = numberOfCompletedTasks.value!!.plus(1)
     }
 
-    private fun rewardUser(expReward: Int) {
-        userStats.value!!.exp += expReward
-        repository.updateUserStats(userStats.value!!)
+    fun rewardUser(expReward: Int) {
+        userStats.let {
+            it.addExp(expReward)
+            repository.updateUserStats(it)
+        }
     }
 }

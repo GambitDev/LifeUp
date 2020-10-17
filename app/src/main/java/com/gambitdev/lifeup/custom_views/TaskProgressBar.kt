@@ -14,6 +14,10 @@ class TaskProgressBar(context: Context, attrs: AttributeSet) : ConstraintLayout(
     private var bronzeMedalPos: Int
     private var silverMedalPos: Int
 
+    private var bronzeMedalAchieved = false
+    private var silverMedalAchieved = false
+    private var goldMedalAchieved = false
+
     init {
         View.inflate(context,
             R.layout.task_progress_bar, this)
@@ -37,15 +41,34 @@ class TaskProgressBar(context: Context, attrs: AttributeSet) : ConstraintLayout(
 
     fun incrementProgress() {
         base_progress_bar.progress++
-        when (base_progress_bar.progress) {
-            bronzeMedalPos -> onMedalAchievedListener?.bronzeAchieved()
-            silverMedalPos -> onMedalAchievedListener?.silverAchieved()
-            base_progress_bar.max -> onMedalAchievedListener?.goldAchieved()
-        }
     }
 
     fun incrementProgressToPosition(position: Int) {
         base_progress_bar.progress = position
+        checkForMedalAchievements()
+    }
+
+    private fun checkForMedalAchievements() {
+        when (base_progress_bar.progress) {
+            bronzeMedalPos -> {
+                if (!bronzeMedalAchieved) {
+                    onMedalAchievedListener?.bronzeAchieved()
+                    bronzeMedalAchieved = true
+                }
+            }
+            silverMedalPos -> {
+                if (!silverMedalAchieved) {
+                    onMedalAchievedListener?.silverAchieved()
+                    silverMedalAchieved = true
+                }
+            }
+            base_progress_bar.max -> {
+                if (!goldMedalAchieved) {
+                    onMedalAchievedListener?.goldAchieved()
+                    goldMedalAchieved = true
+                }
+            }
+        }
     }
 
     fun decrementProgress() {

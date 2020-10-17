@@ -48,5 +48,8 @@ abstract class TaskDao {
     abstract fun updateUserStats(userStats: UserStats)
 
     @Query("SELECT * FROM user_stats WHERE userStatsId = 0")
-    abstract fun getUserStats() : LiveData<UserStats>
+    abstract fun getUserStatsLiveData() : LiveData<UserStats>
+
+    @Query("SELECT * FROM user_stats WHERE userStatsId = 0")
+    abstract fun getUserStats() : UserStats
 }

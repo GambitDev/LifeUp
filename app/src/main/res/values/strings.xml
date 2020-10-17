@@ -10,4 +10,5 @@
     <string name="statistics">Statistics</string>
     <string name="task_exp">%1d exp</string>
     <string name="exp_to_lvl_up_string">Earn %1d exp to level up</string>
+    <string name="user_lvl_tasks_fragment">LEVEL: %1d</string>
 </resources>
