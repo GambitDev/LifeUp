@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -11,6 +12,7 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import com.gambitdev.lifeup.R
 import com.gambitdev.lifeup.adapters.TaskAdapter
 import com.gambitdev.lifeup.view_models.TasksViewModel
@@ -22,6 +24,8 @@ import com.gambitdev.lifeup.models.Task
 import com.gambitdev.lifeup.receivers.DayChangedReceiver
 import com.gambitdev.lifeup.util.Constants
 import com.gambitdev.lifeup.util.Constants.Companion.NUMBER_OF_TASKS_TO_PRESENT
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class TasksFragment : Fragment(R.layout.fragment_tasks_layout), TaskProgressBar.OnMedalAchievedListener {
 
@@ -50,16 +54,31 @@ class TasksFragment : Fragment(R.layout.fragment_tasks_layout), TaskProgressBar.
     }
 
     private fun setupTaskAdapter() {
-        vm.getTasksForToday(NUMBER_OF_TASKS_TO_PRESENT).observe(viewLifecycleOwner, Observer {
-            taskAdapter.taskList = it
-        })
+        var tasksForToday: MutableLiveData<List<Task>>
+        val handler = Handler()
+        GlobalScope.launch {
+            tasksForToday = vm.getTasksForToday(NUMBER_OF_TASKS_TO_PRESENT)
+            handler.post {
+                tasksForToday.observe(viewLifecycleOwner, Observer {
+                    taskAdapter.taskList = it
+                })
+            }
+        }
     }
 
     private fun setupProgressBar() {
-        vm.getTasksForToday(NUMBER_OF_TASKS_TO_PRESENT).observe(viewLifecycleOwner, Observer {
-            progress.setMaxProgress(it.size)
-        })
-        vm.numberOfCompletedTasks.observe(viewLifecycleOwner, Observer {
+        var tasksForToday : MutableLiveData<List<Task>>
+        val handler = Handler()
+        GlobalScope.launch {
+            tasksForToday = vm.getTasksForToday(NUMBER_OF_TASKS_TO_PRESENT)
+            handler.post {
+                tasksForToday.observe(viewLifecycleOwner, Observer {
+                    progress.setMaxProgress(it.size)
+                })
+            }
+        }
+
+        vm.getNumberOfCompletedTasks().observe(viewLifecycleOwner, Observer {
             progress.incrementProgressToPosition(it)
         })
         progress.onMedalAchievedListener = this

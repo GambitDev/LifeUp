@@ -37,7 +37,6 @@ abstract class AppDB : RoomDatabase() {
             )
                 //prepopulate the database after onCreate was called
                 .addCallback(initDbOnFirstOpen)
-                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build()
 

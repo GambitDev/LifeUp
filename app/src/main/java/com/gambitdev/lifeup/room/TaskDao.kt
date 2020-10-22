@@ -30,12 +30,15 @@ abstract class TaskDao {
     @Query ("SELECT * FROM (SELECT * FROM tasks ORDER BY RANDOM()) a GROUP BY a.category ORDER BY RANDOM() LIMIT :numberOfCategoriesToSelect")
     abstract fun getRandomTasks(numberOfCategoriesToSelect: Int) : List<Task>
 
+    @Query ("SELECT COUNT(*) FROM tasks WHERE completed = 1")
+    abstract fun getNumberOfCompletedTasks() : LiveData<Int>
+
     //Methods for TaskList entity
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertTaskList(taskList: TaskList)
 
     @Update
-    abstract fun updateTaskList(taskList: TaskList)
+    abstract fun updateTaskList(taskList: TaskList?)
 
     @Query ("SELECT * FROM task_list WHERE id = 0")
     abstract fun getTaskList() : TaskList

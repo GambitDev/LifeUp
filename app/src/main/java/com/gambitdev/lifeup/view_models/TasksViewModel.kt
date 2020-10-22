@@ -1,18 +1,35 @@
 package com.gambitdev.lifeup.view_models
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.*
 import com.gambitdev.lifeup.models.Task
 import com.gambitdev.lifeup.models.UserStats
 import com.gambitdev.lifeup.room.Repository
 import com.gambitdev.lifeup.util.Constants.Companion.NUMBER_OF_TASKS_TO_PRESENT
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class TasksViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(application)
-    private val userStats = repository.getUserStats()
     private val userStatsLiveData = repository.getUserStatsLiveData()
 
-    val numberOfCompletedTasks = MutableLiveData(0)
+    private suspend fun getUserStats() : UserStats? {
+        var userStats: UserStats? = null
+        val job = GlobalScope.launch {
+            userStats = repository.getUserStats()
+        }
+        job.join()
+
+        return userStats
+    }
+
+    fun getNumberOfCompletedTasks() : LiveData<Int> {
+        return repository.getNumberOfCompletedTasks()
+    }
 
     val userLevel = Transformations.switchMap(userStatsLiveData) {
         return@switchMap MutableLiveData(it.userLevel)
@@ -22,29 +39,28 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         return repository.getAllTasks()
     }
 
-    fun getTasksForToday(numberOfCategoriesToSelect: Int) : LiveData<List<Task>> {
-        return repository.getTasksForToday(numberOfCategoriesToSelect).also {
-            it.value!!.filter { task -> task.completed }.size.let { completedSize ->
-                numberOfCompletedTasks.value = completedSize
-            }
+    suspend fun getTasksForToday(numberOfCategoriesToSelect: Int) : MutableLiveData<List<Task>> {
+        var tasksForToday = MutableLiveData<List<Task>>()
+        val job = GlobalScope.launch {
+            tasksForToday = repository.getTasksForToday(numberOfCategoriesToSelect)
         }
+        job.join()
+
+        return tasksForToday
     }
 
     fun taskCompleted(task: Task) {
         task.completed = true
         repository.updateTask(task)
         rewardUser(task.expWorth)
-        incrementNumberOfCompletedTasks()
-    }
-
-    private fun incrementNumberOfCompletedTasks() {
-        numberOfCompletedTasks.value = numberOfCompletedTasks.value!!.plus(1)
     }
 
     fun rewardUser(expReward: Int) {
-        userStats.let {
-            it.addExp(expReward)
-            repository.updateUserStats(it)
+        GlobalScope.launch {
+            getUserStats()?.let {
+                it.addExp(expReward)
+                repository.updateUserStats(it)
+            }
         }
     }
 }
